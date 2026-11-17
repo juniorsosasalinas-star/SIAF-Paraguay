@@ -4,84 +4,358 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monitoreo de Focos de Calor - Paraguay</title>
+  <title>SIAF Paraguay | Monitoreo Satelital</title>
+
   <link rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f1f5fa;
       color: #17304b;
     }
+
     header {
       background: #17304b;
       color: white;
       text-align: center;
       padding: 24px 12px;
     }
-    header h1 { margin: 0 0 8px; font-size: 24px; }
-    main { max-width: 1200px; margin: auto; padding: 20px; }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 25px;
+    }
+
+    main {
+      max-width: 1250px;
+      margin: auto;
+      padding: 20px;
+    }
+
     .indicadores {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
       margin-bottom: 20px;
     }
+
     .tarjeta {
       background: white;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 2px 8px #00000012;
     }
-    .valor { font-size: 28px; font-weight: bold; }
+
+    .valor {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
     #mapa {
-      height: 550px;
+      height: 570px;
       border-radius: 12px;
       overflow: hidden;
     }
-    .nota { font-size: 13px; color: #526477; }
+
+    .nota {
+      font-size: 13px;
+      color: #526477;
+      line-height: 1.6;
+    }
+
+    .leyenda {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .punto {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .verde { background: #22a06b; }
+    .naranja { background: #f59e0b; }
+    .rojo { background: #dc2626; }
+
+    .error { color: #b91c1c; }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 20px; }
+      main { padding: 12px; }
+      #mapa { height: 450px; }
+    }
   </style>
 </head>
-<body>
-  <header>
-    <h1>MONITOREO SATELITAL DE FOCOS DE CALOR</h1>
-    <div>República del Paraguay | NASA FIRMS</div>
-  </header>
 
-  <main>
-    <section class="indicadores">
-      <div class="tarjeta">
-        <div>Focos últimas 24 horas</div>
-        <div class="valor" id="focos">--</div>
-      </div>
-      <div class="tarjeta">
-        <div>Departamentos afectados</div>
-        <div class="valor" id="departamentos">--</div>
-      </div>
-      <div class="tarjeta">
-        <div>Última actualización</div>
-        <div class="valor" id="actualizacion">--</div>
-      </div>
-    </section>
+<body>
+
+<header>
+  <h1>SIAF PARAGUAY</h1>
+  <div>
+    Sistema Inteligente de Alertas de Incendios Forestales
+  </div>
+  <p>Monitoreo satelital | NASA FIRMS</p>
+</header>
+
+<main>
+
+  <section class="indicadores">
 
     <div class="tarjeta">
-      <h2>Mapa de focos de calor - Paraguay</h2>
-      <div id="mapa"></div>
-      <p class="nota" id="estado">
-        Mapa inicial. Pendiente de conectar con NASA FIRMS.
-      </p>
+      <div>Detecciones en la consulta FIRMS</div>
+      <div class="valor" id="focos">--</div>
     </div>
-  </main>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const mapa = L.map("mapa").setView([-23.5, -58.5], 6);
+    <div class="tarjeta">
+      <div>Fuentes satelitales con detecciones</div>
+      <div class="valor" id="satelites">--</div>
+    </div>
 
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    <div class="tarjeta">
+      <div>Última actualización</div>
+      <div class="valor" id="actualizacion"
+           style="font-size: 19px;">--</div>
+    </div>
+
+  </section>
+
+  <div class="tarjeta">
+
+    <h2>Mapa de detecciones térmicas</h2>
+
+    <div id="mapa"></div>
+
+    <div class="leyenda">
+      <span>
+        <i class="punto verde"></i>
+        FRP menor a 10 MW
+      </span>
+
+      <span>
+        <i class="punto naranja"></i>
+        FRP de 10 a menos de 50 MW
+      </span>
+
+      <span>
+        <i class="punto rojo"></i>
+        FRP de 50 MW o más
+      </span>
+    </div>
+
+    <p class="nota" id="estado">
+      Cargando detecciones NASA FIRMS...
+    </p>
+
+    <p class="nota">
+      Las detecciones corresponden a Paraguay y zonas
+      limítrofes dentro del rectángulo de consulta.
+      Una detección térmica no equivale necesariamente
+      a un incendio forestal confirmado.
+      Los colores representan potencia radiativa (FRP),
+      no niveles de confianza ni riesgo.
+    </p>
+
+  </div>
+
+</main>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script>
+  // ======================================
+  // MAPA BASE
+  // ======================================
+
+  const mapa = L.map("mapa").setView(
+    [-23.5, -58.5], 6
+  );
+
+  L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(mapa);
-  </script>
+    }
+  ).addTo(mapa);
+
+  const capaFocos = L.layerGroup().addTo(mapa);
+
+  // ======================================
+  // FUNCIONES AUXILIARES
+  // ======================================
+
+  function colorFRP(frp) {
+    if (!Number.isFinite(frp)) return "#64748b";
+    if (frp >= 50) return "#dc2626";
+    if (frp >= 10) return "#f59e0b";
+    return "#22a06b";
+  }
+
+  function textoSeguro(valor) {
+    return String(valor ?? "Sin dato")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function formatearFecha(fechaUTC) {
+    const fecha = new Date(fechaUTC);
+
+    if (Number.isNaN(fecha.getTime())) {
+      return "Sin información";
+    }
+
+    return fecha.toLocaleString("es-PY", {
+      timeZone: "America/Asuncion",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  // ======================================
+  // CARGAR DETECCIONES NASA FIRMS
+  // ======================================
+
+  async function cargarFocos() {
+    const estado = document.getElementById("estado");
+
+    try {
+      const respuesta = await fetch(
+        "datos/focos.json?t=" + Date.now(),
+        { cache: "no-store" }
+      );
+
+      if (!respuesta.ok) {
+        throw new Error(
+          "No se pudo cargar focos.json. HTTP "
+          + respuesta.status
+        );
+      }
+
+      const datos = await respuesta.json();
+
+      if (!Array.isArray(datos.detecciones)) {
+        throw new Error(
+          "El archivo JSON no contiene detecciones válidas."
+        );
+      }
+
+      capaFocos.clearLayers();
+
+      let totalValidas = 0;
+      const fuentes = new Set();
+
+      for (const foco of datos.detecciones) {
+        const lat = Number(foco.lat);
+        const lon = Number(foco.lon);
+
+        if (
+          !Number.isFinite(lat) ||
+          !Number.isFinite(lon) ||
+          lat < -90 || lat > 90 ||
+          lon < -180 || lon > 180
+        ) {
+          continue;
+        }
+
+        const frp = foco.frp === "" ||
+          foco.frp == null
+          ? NaN
+          : Number(foco.frp);
+
+        const color = colorFRP(frp);
+
+        const marcador = L.circleMarker(
+          [lat, lon],
+          {
+            radius: 6,
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.75,
+            weight: 1
+          }
+        );
+
+        marcador.bindPopup(`
+          <strong>Detección térmica NASA FIRMS</strong>
+          <hr>
+          <b>Fuente:</b> ${textoSeguro(foco.fuente)}<br>
+          <b>Satélite:</b> ${textoSeguro(foco.satelite)}<br>
+          <b>Fecha UTC:</b> ${textoSeguro(foco.fecha)}<br>
+          <b>Hora UTC (HHMM):</b> ${textoSeguro(foco.hora_utc)}<br>
+          <b>FRP:</b> ${
+            Number.isFinite(frp)
+              ? frp.toFixed(2) + " MW"
+              : "Sin dato"
+          }<br>
+          <b>Confianza FIRMS:</b> ${
+            textoSeguro(foco.confianza)
+          }<br>
+          <b>Latitud:</b> ${lat.toFixed(5)}<br>
+          <b>Longitud:</b> ${lon.toFixed(5)}
+        `);
+
+        marcador.addTo(capaFocos);
+
+        totalValidas++;
+
+        if (foco.fuente) {
+          fuentes.add(foco.fuente);
+        }
+      }
+
+      document.getElementById("focos").textContent =
+        totalValidas;
+
+      document.getElementById("satelites").textContent =
+        fuentes.size;
+
+      document.getElementById("actualizacion").textContent =
+        formatearFecha(datos.actualizado_utc);
+
+      estado.classList.remove("error");
+
+      estado.textContent =
+        "Datos cargados correctamente. " +
+        totalValidas +
+        " detecciones georreferenciadas. " +
+        "Horario de actualización: Paraguay.";
+
+    } catch (error) {
+      console.error("Error al cargar FIRMS:", error);
+
+      estado.classList.add("error");
+      estado.textContent =
+        "Error al cargar las detecciones: " +
+        error.message;
+    }
+  }
+
+  cargarFocos();
+
+  // Revisar el JSON cada 5 minutos
+  setInterval(cargarFocos, 5 * 60 * 1000);
+</script>
+
 </body>
 </html>
