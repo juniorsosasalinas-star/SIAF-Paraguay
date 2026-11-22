@@ -1,9 +1,9 @@
 {
-  "actualizado_utc": "2026-11-22T11:33:41.960920+00:00",
+  "actualizado_utc": "2026-11-22T19:46:10.997135+00:00",
   "area": "República del Paraguay",
   "filtro_geografico": "paraguay.geojson",
-  "total_consultado": 76,
-  "total_detecciones": 56,
+  "total_consultado": 80,
+  "total_detecciones": 59,
   "detecciones": [
     {
       "lat": -19.75584,
@@ -564,6 +564,36 @@
       "confianza": "n",
       "satelite": "N21",
       "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -22.52472,
+      "lon": -57.96329,
+      "fecha": "2026-11-22",
+      "hora_utc": "1634",
+      "frp": "1.08",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -20.30377,
+      "lon": -59.2336,
+      "fecha": "2026-11-22",
+      "hora_utc": "1208",
+      "frp": "14.32",
+      "confianza": "78",
+      "satelite": "Terra",
+      "fuente": "MODIS_NRT"
+    },
+    {
+      "lat": -20.30218,
+      "lon": -59.24387,
+      "fecha": "2026-11-22",
+      "hora_utc": "1208",
+      "frp": "36.04",
+      "confianza": "89",
+      "satelite": "Terra",
+      "fuente": "MODIS_NRT"
     }
   ]
 }
