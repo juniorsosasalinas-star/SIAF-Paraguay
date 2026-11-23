@@ -1,8 +1,49 @@
 {
-  "actualizado_utc": "2026-11-23T01:47:39.799233+00:00",
+  "actualizado_utc": "2026-11-23T12:58:03.731687+00:00",
   "area": "República del Paraguay",
   "filtro_geografico": "paraguay.geojson",
-  "total_consultado": 0,
-  "total_detecciones": 0,
-  "detecciones": []
+  "total_consultado": 6,
+  "total_detecciones": 4,
+  "detecciones": [
+    {
+      "lat": -19.37477,
+      "lon": -59.78284,
+      "fecha": "2026-11-23",
+      "hora_utc": "527",
+      "frp": "4.6",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -19.37414,
+      "lon": -59.78755,
+      "fecha": "2026-11-23",
+      "hora_utc": "527",
+      "frp": "4.6",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -19.3772,
+      "lon": -59.78407,
+      "fecha": "2026-11-23",
+      "hora_utc": "737",
+      "frp": "3.2",
+      "confianza": "38",
+      "satelite": "Aqua",
+      "fuente": "MODIS_NRT"
+    },
+    {
+      "lat": -19.36843,
+      "lon": -59.78262,
+      "fecha": "2026-11-23",
+      "hora_utc": "737",
+      "frp": "3.14",
+      "confianza": "37",
+      "satelite": "Aqua",
+      "fuente": "MODIS_NRT"
+    }
+  ]
 }
