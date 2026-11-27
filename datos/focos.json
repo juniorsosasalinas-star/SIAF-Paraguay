@@ -1,8 +1,69 @@
 {
-  "actualizado_utc": "2026-11-27T01:46:09.477211+00:00",
+  "actualizado_utc": "2026-11-27T12:34:43.922426+00:00",
   "area": "República del Paraguay",
   "filtro_geografico": "paraguay.geojson",
-  "total_consultado": 0,
-  "total_detecciones": 0,
-  "detecciones": []
+  "total_consultado": 10,
+  "total_detecciones": 6,
+  "detecciones": [
+    {
+      "lat": -22.08971,
+      "lon": -62.19688,
+      "fecha": "2026-11-27",
+      "hora_utc": "510",
+      "frp": "1.4",
+      "confianza": "n",
+      "satelite": "N20",
+      "fuente": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "lat": -22.08595,
+      "lon": -62.19609,
+      "fecha": "2026-11-27",
+      "hora_utc": "510",
+      "frp": "1.4",
+      "confianza": "n",
+      "satelite": "N20",
+      "fuente": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "lat": -21.87672,
+      "lon": -61.99686,
+      "fecha": "2026-11-27",
+      "hora_utc": "552",
+      "frp": "1.92",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -21.87643,
+      "lon": -61.99752,
+      "fecha": "2026-11-27",
+      "hora_utc": "552",
+      "frp": "1.9",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -21.87172,
+      "lon": -61.99621,
+      "fecha": "2026-11-27",
+      "hora_utc": "552",
+      "frp": "1.98",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "lat": -21.87143,
+      "lon": -61.99689,
+      "fecha": "2026-11-27",
+      "hora_utc": "552",
+      "frp": "1.9",
+      "confianza": "n",
+      "satelite": "N21",
+      "fuente": "VIIRS_NOAA21_NRT"
+    }
+  ]
 }
